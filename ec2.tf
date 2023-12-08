@@ -23,14 +23,13 @@ resource "aws_security_group" "youtube_sg" {
   tags = {
     Name = "allow_tls"
   }
-  depends_on = [aws_vpc.vpc_youtube_network]
+
 }
 
 resource "aws_instance" "youtube_ec2_rhel9" {
   ami           = var.rhel9_ami
   instance_type = var.instance_type
   subnet_id     = aws_subnet.subnet_network_a.id
-  depends_on    = [aws_subnet.subnet_network_a]
 
   tags = {
     Name = "EC2-RHEL9"
