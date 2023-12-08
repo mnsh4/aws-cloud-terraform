@@ -5,3 +5,9 @@
 **_LocalStack_**
 
 `https://www.localstack.cloud/`
+
+## Arquitectura a crear
+
+<p align="center">
+  <a href="https://www.terraform.io/" target="blank"><img src="./docs/aws-infra.png" width="650" alt="Terraform Logo" /></a>
+</p>
