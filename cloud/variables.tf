@@ -10,9 +10,3 @@ variable "rhel9_ami" {
   type        = string
   default     = "ami-023c11a32b0207432"
 }
-
-variable "region" {
-  description = "aws region"
-  type        = string
-  default     = "us-east-1"
-}
