@@ -1,7 +1,24 @@
+terraform {
+  required_version = "~> 1.5.0"
+  required_providers {
+    # We use the aws provider in Tf
+    aws = {
+      source  = "hashicorp/aws" # Public Registry
+      version = "~>5.29.0"
+    }
+  }
+}
+
 provider "aws" {
+  region = var.region
+
+}
+
+provider "aws" {
+  alias                       = "localstack"
   access_key                  = "test"
   secret_key                  = "test"
-  region                      = var.region
+  region                      = "us-east-1"
   s3_use_path_style           = false
   skip_credentials_validation = true
   skip_metadata_api_check     = true
@@ -23,7 +40,7 @@ provider "aws" {
     rds            = "http://localhost:4566"
     redshift       = "http://localhost:4566"
     route53        = "http://localhost:4566"
-    s3             = "http://s3.localhost.localstack.cloud:4566"
+    s3             = "http://localhost:4566"
     secretsmanager = "http://localhost:4566"
     ses            = "http://localhost:4566"
     sns            = "http://localhost:4566"
