@@ -1,4 +1,4 @@
-module "vpc" {
+module "vpc-youtube" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = "vpc-youtube-desa"

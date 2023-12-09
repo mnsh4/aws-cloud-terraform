@@ -16,3 +16,9 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "server_count" {
+  type        = number
+  description = "Instance name"
+  default     = 1
+}
