@@ -1,17 +1,17 @@
 terraform {
-  required_version = "~> 1.5.0"
+  required_version = ">= 1.6.0"
   required_providers {
     # We use the aws provider in Tf
     aws = {
       source  = "hashicorp/aws" # Public Registry
-      version = "~>5.29.0"
+      version = ">=5.29.0"
     }
   }
 }
 
 provider "aws" {
-  region = var.region
-
+  profile = "personal"
+  region  = var.region
 }
 
 provider "aws" {
