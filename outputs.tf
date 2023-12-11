@@ -16,5 +16,9 @@ output "private_keys" {
 }
 
 output "ec2_public_ip" {
-  value = aws_instance.youtube_rhel9.*.public_ip
+  value = aws_instance.ec2_amz_publ.*.public_ip
+}
+
+output "ec2_private_ip" {
+  value = aws_instance.ec2_rhel9_priv.*.private_ip
 }
