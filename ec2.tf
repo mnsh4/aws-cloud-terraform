@@ -102,7 +102,7 @@ resource "aws_security_group" "web_server" {
 
 resource "aws_instance" "private_server" {
   count         = var.private_server_count
-  ami           = var.rhel9_ami
+  ami           = data.aws_ami.ubuntu.id
   key_name      = var.create_key_pair ? aws_key_pair.server[0].key_name : null
   instance_type = var.instance_type
   subnet_id     = module.network.private_subnets[count.index]
