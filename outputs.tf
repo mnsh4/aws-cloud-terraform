@@ -18,3 +18,11 @@ output "private_key" {
   value     = var.create_key_pair ? tls_private_key.server[0].private_key_pem : null
   sensitive = true
 }
+
+output "private_server" {
+  value = aws_instance.private_server.id
+}
+
+output "public_server" {
+  value = aws_instance.public_server.id
+}
