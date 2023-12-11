@@ -32,13 +32,14 @@ resource "aws_key_pair" "server" {
 }
 
 resource "aws_instance" "public_server" {
-  count                  = var.public_server_count
-  ami                    = var.amz_ami
-  key_name               = var.create_key_pair ? aws_key_pair.server[0].key_name : null #if create_key_pair is true then use the key_name else don't use the key_name
-  instance_type          = var.instance_type
-  subnet_id              = module.network.public_subnets[count.index]
-  vpc_security_group_ids = [aws_security_group.server.id]
-  user_data              = <<-EOF
+  count                       = var.public_server_count
+  ami                         = var.amz_ami
+  key_name                    = var.create_key_pair ? aws_key_pair.server[0].key_name : null #if create_key_pair is true then use the key_name else don't use the key_name
+  instance_type               = var.instance_type
+  subnet_id                   = module.network.public_subnets[count.index]
+  vpc_security_group_ids      = [aws_security_group.server.id]
+  associate_public_ip_address = var.include_ipv4
+  user_data                   = <<-EOF
               #!/bin/bash
               # Utiliza esto para tus datos de usuario
               # Instala httpd (Version: Linux 2)
@@ -49,7 +50,7 @@ resource "aws_instance" "public_server" {
               echo "<h1>Volodimir Zelenski from $(hostname -f)</h1>" > /var/www/html/index.html
               EOF
 
-  associate_public_ip_address = var.include_ipv4
+
   tags = merge(
     var.tags,
     {
