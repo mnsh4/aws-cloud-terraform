@@ -33,3 +33,38 @@ variable "private_server_count" {
   description = "Instance count"
   default     = 1
 }
+
+variable "private_subnets" {
+  type        = list(string)
+  description = "value of private subnets"
+}
+
+variable "public_subnets" {
+  type        = list(string)
+  description = "value of public subnets"
+}
+
+variable "vpc_cidr" {
+  type        = string
+  description = "Network CIDR"
+}
+
+variable "name" {
+  type        = string
+  description = "Environment name"
+  default     = "youtube" #optional
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "tags for resources"
+  default = {
+    "Environment" = "dev"
+  }
+}
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "enable nat gateway"
+  default     = true
+}

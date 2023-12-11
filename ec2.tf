@@ -1,7 +1,7 @@
 resource "aws_security_group" "youtube_sg" {
   name        = "youtube_sg"
   description = "Allow TLS inbound traffic"
-  vpc_id      = module.vpc-youtube.vpc_id
+  vpc_id      = module.network.vpc_id
 
   ingress {
     description = "SSH"
@@ -28,7 +28,7 @@ resource "aws_security_group" "youtube_sg" {
 resource "aws_security_group" "web_server" {
   name        = "youtube-web-server"
   description = "Allow inbound traffic"
-  vpc_id      = module.vpc-youtube.vpc_id
+  vpc_id      = module.network.vpc_id
 
   ingress {
     description = "http"
@@ -62,7 +62,7 @@ resource "aws_instance" "ec2_amz_publ" {
   ami           = var.amz_ami
   instance_type = var.instance_type
   key_name      = aws_key_pair.youtube-keypair.key_name
-  subnet_id     = module.vpc-youtube.public_subnets[count.index]
+  subnet_id     = module.network.public_subnets[count.index]
   vpc_security_group_ids = [
     aws_security_group.youtube_sg.id,
     aws_security_group.web_server.id
@@ -87,7 +87,7 @@ resource "aws_instance" "ec2_rhel9_priv" {
   ami           = var.rhel9_ami
   instance_type = var.instance_type
   key_name      = aws_key_pair.youtube-keypair.key_name
-  subnet_id     = module.vpc-youtube.private_subnets[count.index]
+  subnet_id     = module.network.private_subnets[count.index]
   vpc_security_group_ids = [
     aws_security_group.youtube_sg.id,
     aws_security_group.web_server.id

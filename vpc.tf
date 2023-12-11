@@ -1,18 +1,20 @@
-module "vpc-youtube" {
-  source = "terraform-aws-modules/vpc/aws"
+locals {
+  single_nat_gateway = true
+}
 
-  name = "vpc-youtube-desa"
-  cidr = "172.31.0.0/16"
+module "network" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.1.2"
+
+  name = "${var.name}-vpc"
+  cidr = var.vpc_cidr
 
   azs             = slice(data.aws_availability_zones.available.names, 0, 3)
-  private_subnets = ["172.31.48.0/20", "172.31.64.0/20", "172.31.16.0/20"]   # Salen por NAT Gateway
-  public_subnets  = ["172.31.96.0/20", "172.31.112.0/20", "172.31.128.0/20"] # Salen por Internet Gateway
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
 
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
+  enable_nat_gateway = var.enable_nat_gateway
+  single_nat_gateway = local.single_nat_gateway
 
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
+  tags = var.tags
 }
