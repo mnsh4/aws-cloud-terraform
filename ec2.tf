@@ -17,6 +17,15 @@ resource "aws_security_group" "server" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.name}-server-sg"
+    }
+  )
+
+
 }
 
 resource "tls_private_key" "server" {
@@ -82,6 +91,13 @@ resource "aws_security_group" "web_server" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.name}-server-sg"
+    }
+  )
 }
 
 resource "aws_instance" "private_server" {

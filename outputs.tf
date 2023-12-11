@@ -20,9 +20,9 @@ output "private_key" {
 }
 
 output "private_server" {
-  value = aws_instance.private_server.id
+  value = aws_instance.private_server.*.id
 }
 
 output "public_server" {
-  value = aws_instance.public_server.id
+  value = aws_instance.public_server.*.id
 }

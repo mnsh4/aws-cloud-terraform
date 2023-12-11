@@ -39,13 +39,13 @@ variable "instance_type" {
 variable "public_server_count" {
   type        = number
   description = "Public Instance count"
-  default     = 0
+  default     = 1
 }
 
 variable "private_server_count" {
   type        = number
   description = "Public Instance count"
-  default     = 0
+  default     = 1
 }
 
 #Optional Variables
