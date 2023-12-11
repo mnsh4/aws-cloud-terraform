@@ -25,31 +25,43 @@ resource "aws_security_group" "youtube_sg" {
   }
 }
 
-data "aws_ami" "rhel9_ami_free" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["RHEL-9.*GA*x86_64*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["309956199498"] # Red Hat
+# KEY PAIR
+resource "tls_private_key" "youtube-rsa-4096" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
+# KEY PAIR
+resource "aws_key_pair" "youtube-keypair" {
+  key_name   = "deployer-key"
+  public_key = tls_private_key.youtube-rsa-4096.public_key_openssh
+}
 
-resource "aws_instance" "youtube_rhel9_server" {
-  count                  = var.server_count
-  ami                    = data.aws_ami.rhel9_ami_free.id
+resource "aws_instance" "ec2_rhel9_priv" {
+  count                  = var.private_server_count
+  ami                    = var.rhel9_ami
   instance_type          = var.instance_type
+  key_name               = aws_key_pair.youtube-keypair.key_name
   subnet_id              = module.vpc-youtube.public_subnets[count.index]
   vpc_security_group_ids = [aws_security_group.youtube_sg.id]
 
   tags = {
-    Name = "Youtube-RHEL9"
+    Name = "PrivateEC2-${count.index}"
   }
 }
+
+
+resource "aws_instance" "ec2_amz_publ" {
+  count                  = var.public_server_count
+  ami                    = var.amz_ami
+  instance_type          = var.instance_type
+  key_name               = aws_key_pair.youtube-keypair.key_name
+  subnet_id              = module.vpc-youtube.public_subnets[count.index]
+  vpc_security_group_ids = [aws_security_group.youtube_sg.id]
+
+  tags = {
+    Name = "PublicEC2-${count.index}"
+  }
+}
+
+

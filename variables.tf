@@ -4,11 +4,16 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-# Red Hat Enterprise Linux 9 (HVM) (free tier)
 variable "rhel9_ami" {
-  description = "ami"
+  description = "redhat enterprise linux 9"
   type        = string
   default     = "ami-023c11a32b0207432"
+}
+
+variable "amz_ami" {
+  description = "amazon linux 2023"
+  type        = string
+  default     = "ami-0230bd60aa48260c6"
 }
 
 variable "region" {
@@ -17,8 +22,14 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "server_count" {
+variable "public_server_count" {
   type        = number
-  description = "Instance name"
+  description = "Instance count"
+  default     = 1
+}
+
+variable "private_server_count" {
+  type        = number
+  description = "Instance count"
   default     = 1
 }
