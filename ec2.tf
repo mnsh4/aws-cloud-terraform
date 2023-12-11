@@ -125,60 +125,59 @@ resource "aws_instance" "private_server" {
   )
 }
 
-# resource "aws_lb" "youtube" {
-#   name               = "${var.name}-lb"
-#   internal           = false
-#   load_balancer_type = "application"
-#   security_groups    = [aws_security_group.web_server.id]
-#   subnets            = module.network.public_subnets
+resource "aws_lb" "youtube" {
+  name               = "${var.name}-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.web_server.id]
+  subnets            = module.network.public_subnets
 
-#   enable_deletion_protection = false
+  enable_deletion_protection = false
 
-#   tags = merge({
-#     Name = "${var.name}-lb"
-#     },
-#   var.tags)
-# }
+  tags = merge({
+    Name = "${var.name}-lb"
+    },
+  var.tags)
+}
 
-# resource "aws_lb_target_group" "youtube" {
-#   name     = "${var.name}-tg"
-#   port     = 80
-#   protocol = "HTTP"
-#   vpc_id   = module.network.vpc_id
-# }
+resource "aws_lb_target_group" "youtube" {
+  name     = "${var.name}-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = module.network.vpc_id
+}
 
-# resource "aws_lb_listener" "youtube" {
-#   load_balancer_arn = aws_lb.youtube.arn
-#   port              = "80"
-#   protocol          = "HTTP"
+resource "aws_lb_listener" "youtube" {
+  load_balancer_arn = aws_lb.youtube.arn
+  port              = "80"
+  protocol          = "HTTP"
 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.youtube.arn
-#   }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.youtube.arn
+  }
+}
 
-# }
+resource "aws_lb_listener_rule" "youtube" {
+  listener_arn = aws_lb_listener.youtube.arn
+  priority     = 100
 
-# resource "aws_lb_listener_rule" "youtube" {
-#   listener_arn = aws_lb_listener.youtube.arn
-#   priority     = 100
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.youtube.arn
+  }
 
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.youtube.arn
-#   }
+  condition {
+    path_pattern {
+      values = ["/"]
+    }
+  }
+}
 
-#   condition {
-#     path_pattern {
-#       values = ["/"]
-#     }
-#   }
-# }
-
-# resource "aws_lb_target_group_attachment" "youtube" {
-#   count            = var.private_server_count
-#   target_group_arn = aws_lb_target_group.youtube.arn
-#   target_id        = aws_instance.private_server[count.index].id
-#   port             = 80
-# }
+resource "aws_lb_target_group_attachment" "youtube" {
+  count            = var.private_server_count
+  target_group_arn = aws_lb_target_group.youtube.arn
+  target_id        = aws_instance.private_server[count.index].id
+  port             = 80
+}
 

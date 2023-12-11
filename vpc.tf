@@ -1,6 +1,3 @@
-locals {
-  single_nat_gateway = true
-}
 
 module "network" {
   source  = "terraform-aws-modules/vpc/aws"
