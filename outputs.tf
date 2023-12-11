@@ -1,24 +1,20 @@
-output "region" {
-  value = data.aws_region.current.name
+output "vpc_id" {
+  value = module.network.vpc_id
 }
 
-output "azs" {
-  value = data.aws_availability_zones.available.names
+output "public_subnets" {
+  value = module.network.public_subnets
 }
 
-output "rhel9_ami_ids" {
-  value = aws_instance.ec2_rhel9_priv[*].id
+output "private_subnets" {
+  value = module.network.private_subnets
 }
 
-output "private_keys" {
-  value     = tls_private_key.youtube-rsa-4096.private_key_pem
+output "public_server_ips" {
+  value = aws_instance.public_server.*.public_ip
+}
+
+output "private_key" {
+  value     = var.create_key_pair ? tls_private_key.server[0].private_key_pem : null
   sensitive = true
-}
-
-output "ec2_public_ip" {
-  value = aws_instance.ec2_amz_publ.*.public_ip
-}
-
-output "ec2_private_ip" {
-  value = aws_instance.ec2_rhel9_priv.*.private_ip
 }

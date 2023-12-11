@@ -1,8 +1,4 @@
-variable "instance_type" {
-  description = "instance type"
-  type        = string
-  default     = "t2.micro"
-}
+
 
 variable "rhel9_ami" {
   description = "redhat enterprise linux 9"
@@ -16,43 +12,59 @@ variable "amz_ami" {
   default     = "ami-0230bd60aa48260c6"
 }
 
-variable "region" {
-  description = "aws region"
+
+# variable "private_subnets" {
+#   type        = list(string)
+#   description = "value of private subnets"
+# }
+
+# variable "public_subnets" {
+#   type        = list(string)
+#   description = "value of public subnets"
+# }
+
+#Mandatory Variables
+variable "vpc_cidr" {
   type        = string
-  default     = "us-east-1"
+  description = "Network CIDR"
+  default     = "10.0.0.0/16"
+}
+
+variable "instance_type" {
+  type        = string
+  description = "Instance type"
+  default     = "t2.micro"
 }
 
 variable "public_server_count" {
   type        = number
-  description = "Instance count"
-  default     = 1
+  description = "Public Instance count"
+  default     = 0
 }
 
 variable "private_server_count" {
   type        = number
-  description = "Instance count"
-  default     = 1
+  description = "Public Instance count"
+  default     = 0
 }
 
-variable "private_subnets" {
-  type        = list(string)
-  description = "value of private subnets"
-}
-
-variable "public_subnets" {
-  type        = list(string)
-  description = "value of public subnets"
-}
-
-variable "vpc_cidr" {
-  type        = string
-  description = "Network CIDR"
-}
-
+#Optional Variables
 variable "name" {
   type        = string
   description = "Environment name"
   default     = "youtube" #optional
+}
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "enable nat gateway"
+  default     = true
+}
+
+variable "include_ipv4" {
+  type        = bool
+  description = "Assign public IP to instances in public subnets"
+  default     = true
 }
 
 variable "tags" {
@@ -63,8 +75,14 @@ variable "tags" {
   }
 }
 
-variable "enable_nat_gateway" {
+variable "create_key_pair" {
   type        = bool
-  description = "enable nat gateway"
+  description = "create key pair"
   default     = true
+}
+
+variable "region" {
+  description = "aws region"
+  type        = string
+  default     = "us-east-1"
 }
